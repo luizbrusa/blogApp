@@ -8,6 +8,7 @@ const flash = require("connect-flash");
 const admin = require("./routes/admin");
 const usuario = require("./routes/usuario");
 const path = require("path");
+const db = require("./config/db");
 
 // Utilizar o Passport
 const passport = require("passport");
@@ -62,8 +63,8 @@ const Categoria = mongoose.model("categorias");
 
     // Mongoose
     mongoose.Promise = global.Promise;
-    mongoose.connect("mongodb://localhost/blogapp").then(() => {
-        console.log("Conectado ao MongoDB...");
+    mongoose.connect(db.mongoURI).then(() => {
+        console.log("Conectado ao MongoDB em " + db.mongoURI + "...");
     }).catch((err) => {
         console.log("Erro ao Conectar ao MongoDB: " + err);
     });
@@ -131,7 +132,7 @@ const Categoria = mongoose.model("categorias");
     app.use("/usuario", usuario);
 
 // Demais Configurações
-const WEBPORT = 8080;
+const WEBPORT = process.env.PORT || 8080;
 app.listen(WEBPORT, () => {
-    console.log("Servidor iniciado em http://localhost:" + WEBPORT + "/...");
+    console.log("Servidor iniciado na porta " + WEBPORT + "/...");
 });
